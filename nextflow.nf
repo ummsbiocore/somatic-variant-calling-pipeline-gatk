@@ -31,6 +31,7 @@ if (!params.known_indels_index){params.known_indels_index = ""}
 if (!params.groups_file){params.groups_file = ""} 
 if (!params.compare_file){params.compare_file = ""} 
 if (!params.annotation){params.annotation = ""} 
+if (!params.annotation_index){params.annotation_index = ""} 
 // Stage empty file to be used as an optional input where required
 ch_empty_file_1 = file("$baseDir/.emptyfiles/NO_FILE_1", hidden:true)
 
@@ -53,6 +54,7 @@ g_16_5_g_9 = file(params.known_indels_index, type: 'any')
 g_18_1_g_17 = file(params.groups_file, type: 'any')
 g_19_2_g_17 = file(params.compare_file, type: 'any')
 g_24_2_g_23 = file(params.annotation, type: 'any')
+g_27_3_g_23 = file(params.annotation_index, type: 'any')
 
 build_BWA_index = params.Check_Build_BWA.build_BWA_index
 //* params.bwa_index =  ""  //* @input
@@ -404,20 +406,21 @@ input:
  path input_vcf
  path genome
  path annotation
+ path annotation_index
 
 output:
  path "${basename}*"  ,emit:g_23_vcfFile00 
 
-container 'ensemblorg/ensembl-vep:release_112.0'
+container 'quay.io/biocontainers/ensembl-vep:115.2--pl5321h2a3209d_1'
+disk 1000.GB
 
 script:
 basename = input_vcf.baseName.replaceAll(".vcf", "")
 annotation_name = annotation.baseName
 
 """
-bgzip ${annotation}
-tabix ${annotation_name}.gtf.gz
-vep --fasta ${genome} --gtf ${annotation_name}.gtf.gz -i ${input_vcf} -o ${basename}
+vep --fasta ${genome} --gtf ${annotation} -i ${input_vcf} -o ${basename} --symbol --biotype
+sed -i 's/http://g' ${basename}_summary.html
 
 mv ${basename} ${basename}.vcf
 """
@@ -473,7 +476,7 @@ mutect2(g_17_inputDir00_g_21.flatten(),g_10_genomeDict01_g_21)
 g_21_vcfFile00_g_23 = mutect2.out.g_21_vcfFile00_g_23
 
 
-vep(g_21_vcfFile00_g_23,g_2_1_g_23,g_24_2_g_23)
+vep(g_21_vcfFile00_g_23,g_2_1_g_23,g_24_2_g_23,g_27_3_g_23)
 g_23_vcfFile00 = vep.out.g_23_vcfFile00
 
 
