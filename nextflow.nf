@@ -114,7 +114,7 @@ input:
 output:
  path "*/${bwa2}" ,optional:true  ,emit:g_1_bwaindex02_g_3 
 
-container 'quay.io/viascientific/pipeline_base_image:1.0'
+container 'quay.io/ummsbiocore/pipeline_base_image:1.0'
 stageInMode 'copy'
 
 when:
@@ -214,7 +214,7 @@ input:
 output:
  path "genomeDict"  ,emit:g_10_genomeDict01_g_9 
 
-container 'quay.io/viascientific/gatk:1.0.0'
+container 'quay.io/ummsbiocore/gatk:1.0.0'
 stageInMode 'copy'
 
 script:
@@ -289,7 +289,7 @@ input:
 output:
  path "${name}_recal.bam*"  ,emit:g_13_bamFile00_g_17 
 
-container 'quay.io/viascientific/gatk:1.0.0'
+container 'quay.io/ummsbiocore/gatk:1.0.0'
 
 script:
 
@@ -351,7 +351,7 @@ input:
 output:
  path "${comparison}.vcf.gz"  ,emit:g_21_vcfFile00_g_23 
 
-container 'quay.io/viascientific/gatk:1.0.0'
+container 'quay.io/ummsbiocore/gatk:1.0.0'
 
 script:
 
