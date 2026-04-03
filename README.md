@@ -1,0 +1,1 @@
+Identify somatic short variants (SNVs and Indels) in one or more tumor samples from a single individual, with or without a matched normal sample.
